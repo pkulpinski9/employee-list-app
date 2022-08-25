@@ -16,9 +16,9 @@
                 <tr>
                     <th scope="row">{{ $employee->emp_no }}</th>
                     <td>{{ $employee->first_name }} {{ $employee->last_name }}</td>
-                    <td>Department</td>
-                    <td>title</td>
-                    <td>salary</td>
+                    <td>{{ $employee->dept_name }}</td>
+                    <td>{{ $employee->title}}</td>
+                    <td>{{ $employee->salary }}</td>
                 </tr>
                 @endforeach
                 </tbody>

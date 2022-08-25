@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Employee extends Model
+class Title extends Model
 {
+    use HasFactory;
+
     use HasFactory;
 
     /**
@@ -15,7 +17,7 @@ class Employee extends Model
      * @var string
      */
 
-    protected $table = 'employees';
+    protected $table = 'titles';
 
     /**
      * The primary key associated with the table.
@@ -25,15 +27,7 @@ class Employee extends Model
 
     protected $primaryKey = 'emp_no';
 
-    public function titles(){
-        return $this->hasMany(Title::class, 'emp_no', 'emp_no');
+    public function employees(){
+        return $this->belongsTo(Employee::class, 'emp_no', 'emp_no');
     }
-    public function salaries(){
-        return $this->hasMany(Salary::class, 'emp_no', 'emp_no');
-    }
-
-    public function departments(){
-        return $this->belongsToMany(Department::class);
-    }
-
 }
