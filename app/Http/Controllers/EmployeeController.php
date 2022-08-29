@@ -2,31 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Title;
+use App\Exports\EmployeesExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $employees = Employee::getCurrentList($request->all())->paginate(15);
+        ;
 
-        $employees = DB::table('employees')
-            ->join('titles', 'employees.emp_no', '=', 'titles.emp_no')
-            ->join('salaries', 'employees.emp_no', '=', 'salaries.emp_no')
-            ->join('dept_emp', 'employees.emp_no', '=', 'dept_emp.emp_no')
-            ->leftJoin('departments', 'dept_emp.dept_no', 'departments.dept_no')
-            ->select('employees.*', 'titles.title', 'salaries.salary', 'departments.dept_name')
-            ->where('salaries.to_date', '=', '9999-01-01')
-            ->where('titles.to_date', '=', '9999-01-01')
-            ->where('dept_emp.to_date', '=', '9999-01-01')
-            ->paginate(15);
+//        dd($employees);
+        $departments = Department::all();
 
 //        dd($employees);
 
         return view('welcome', [
             'employees' => $employees,
+            'departments' => $departments,
+            'filters'   => $request->all()
         ]);
+    }
+    public function export(Employee $emp_no, Request $request)
+    {
+        $currentList = Employee::getCurrentList()->where('employees.emp_no', '=', $emp_no->emp_no);
+
+        $sumSalary = $currentList->sum('salary');
+
+//        dd($sumSalary);
+//        dd($currentList->get());
+
+        $export = new EmployeesExport(
+            $currentList
+
+        );
+
+//        dd($export);
+
+        return Excel::download($export, 'employees.csv');
+        redirect()->route('welcome');
     }
 }

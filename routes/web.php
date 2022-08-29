@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\EmployeeController::class, 'index'])->name('xdd');
+Route::get('/', [App\Http\Controllers\EmployeeController::class, 'index'])->name('welcome');
+Route::get('/export/{emp_no}', [App\Http\Controllers\EmployeeController::class, 'export'])->name('home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
