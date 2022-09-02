@@ -27,7 +27,8 @@ class Title extends Model
 
     protected $primaryKey = 'emp_no';
 
-    public function employees(){
+    public function employees()
+    {
         return $this->belongsTo(Employee::class, 'emp_no', 'emp_no');
     }
 }

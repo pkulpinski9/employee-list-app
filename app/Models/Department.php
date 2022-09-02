@@ -34,4 +34,9 @@ class Department extends Model
      */
     protected $keyType = 'char';
 
+    public function employees()
+    {
+        return $this->belongsTo(Employee::class, 'emp_no', 'emp_no');
+    }
+
 }

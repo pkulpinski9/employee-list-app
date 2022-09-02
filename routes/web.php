@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [App\Http\Controllers\EmployeeController::class, 'index'])->name('welcome');
-Route::get('/export/{emp_no}', [App\Http\Controllers\EmployeeController::class, 'export'])->name('home');
+Route::get('/export/{emp_no}', [App\Http\Controllers\EmployeeController::class, 'export'])->name('export');
 
 Auth::routes();
 

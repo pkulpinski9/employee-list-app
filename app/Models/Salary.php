@@ -31,5 +31,4 @@ class Salary extends Model
     {
         return $this->belongsTo(Employee::class, 'emp_no', 'emp_no');
     }
-
 }

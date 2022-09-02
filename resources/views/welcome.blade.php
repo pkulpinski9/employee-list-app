@@ -6,11 +6,11 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th scope="col">emp_no</th>
-                            <th scope="col">Imię i nazwisko</th>
-                            <th scope="col">Departament</th>
-                            <th scope="col">Tytuł</th>
-                            <th scope="col">Pensja</th>
+                            <th scope="col">{{ __('emp_no') }}</th>
+                            <th scope="col">{{ __('Name') }}</th>
+                            <th scope="col">{{ __('Department') }}</th>
+                            <th scope="col">{{ __('Title') }}</th>
+                            <th scope="col">{{ __('Salary') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -19,7 +19,7 @@
                             <th scope="row">{{ $employee->emp_no }}</th>
                             <td>{{ $employee->first_name }} {{ $employee->last_name }}</td>
                             <td>{{ $employee->dept_name }}</td>
-                            <td>{{ $employee->title}}</td>
+                            <td>{{ $employee->title }}</td>
                             <td>{{ $employee->salary }}</td>
                             <td>
                                 <a href="/export/{{ $employee->emp_no }}" class="btn btn-secondary">{{ __('Export') }}</a>
@@ -30,50 +30,35 @@
                     </table>
                 </div>
                 <div class="col-3" style="background-color: #e6e6e6">
-{{--                    <div style="text-align: center">--}}
-{{--                        <p>plec</p>--}}
-{{--                        <div class="form-check form-check-inline">--}}
-{{--                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">--}}
-{{--                            <label class="form-check-label" for="inlineCheckbox1">M</label>--}}
-{{--                        </div>--}}
-{{--                        <div class="form-check form-check-inline">--}}
-{{--                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">--}}
-{{--                            <label class="form-check-label" for="inlineCheckbox2">F</label>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
                     <form>
-                        <p>Which employees</p>
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" id="radio1" name="actual_employee" value="9999-01-01">
-                            <label class="form-check-label" for="radio1">Current</label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" id="radio2" name="actual_employee" value="M">
-                            <label class="form-check-label" for="radio2">Former</label>
-                        </div>
-                        <p>min salary</p>
+                        <p class="my-2">{{ __('Which employees') }}</p>
+                        <select class="form-control" name="employee_select">
+                            <option value="">{{ __('Choose employees') }}</option>
+                            <option value="1">{{ __('Current') }}</option>
+                            <option value="2">{{ __('Former') }}</option>
+                        </select>
+                        <p class="my-2">{{ __('Min salary') }}</p>
                         <input class="col form-control" type="text" name="min_salary" placeholder="10000">
-                        <p>max salary</p>
+                        <p class="my-2">{{ __('Max salary') }}</p>
                         <input class="col form-control" type="text" name="max_salary" placeholder="50000">
-                        <p>plec</p>
+                        <p class="my-2">{{ __('Sex') }}</p>
                         <div class="form-check">
-                            <input type="radio" class="form-check-input" id="radio3" name="gender" value="F">
+                            <input type="radio" class="form-check-input" id="radio3" name="gender" value="{{ __('F') }}">
                             <label class="form-check-label" for="radio3">F</label>
                         </div>
                         <div class="form-check">
-                            <input type="radio" class="form-check-input" id="radio4" name="gender" value="M">
+                            <input type="radio" class="form-check-input" id="radio4" name="gender" value="{{ __('M') }}">
                             <label class="form-check-label" for="radio4">M</label>
                         </div>
-                        <p>Department</p>
+                        <p class="my-2">{{ __('Department') }}</p>
                         <select class="form-control" name="department">
-                            <option value="">Choose department</option>
+                            <option value="">{{ __('Choose department') }}</option>
                             @foreach($departments as $department)
                                 <option>{{ $department->dept_name }}</option>
                             @endforeach
                         </select>
 
-                        <button type="submit" name="submit" class="btn btn-secondary">Secondary</button>
+                        <button type="submit" name="submit" class="btn btn-secondary my-2">{{ __('Filtr') }}</button>
                     </form>
 
 

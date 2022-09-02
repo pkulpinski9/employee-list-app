@@ -33,15 +33,27 @@ class Employee extends Model
     public function salaries(){
         return $this->hasMany(Salary::class, 'emp_no', 'emp_no');
     }
+    public function departments(){
+        return $this->belongsToMany(Department::class);
+    }
 
     public static function getCurrentList($array = [])
     {
         $collection = DB::table('employees')
-            ->join('titles', 'employees.emp_no', '=', 'titles.emp_no')
+            ->join('current_dept_emp', 'employees.emp_no', '=', 'current_dept_emp.emp_no')
+            ->leftJoin('departments', 'current_dept_emp.dept_no', '=', 'departments.dept_no')
             ->join('salaries', 'employees.emp_no', '=', 'salaries.emp_no')
-            ->join('dept_emp', 'employees.emp_no', '=', 'dept_emp.emp_no')
-            ->leftJoin('departments', 'dept_emp.dept_no', 'departments.dept_no')
-            ->select('employees.*', 'titles.title', 'salaries.salary', 'departments.dept_name');
+            ->join('titles', 'employees.emp_no', '=', 'titles.emp_no')
+                        ->select("employees.emp_no","employees.first_name","employees.last_name","departments.dept_name", "titles.title","salaries.salary",
+                            DB::raw("(SELECT SUM(salaries.salary) FROM salaries
+                                    WHERE salaries.emp_no = employees.emp_no
+                                    GROUP BY salaries.emp_no) as salary_total"),
+                        )
+            ->whereColumn('salaries.to_date', '=', 'current_dept_emp.to_date')
+            ->whereColumn('titles.to_date', '=', 'current_dept_emp.to_date');
+
+
+//        dd($collection);
 
         return self::filter($collection, $array);
     }
@@ -55,6 +67,7 @@ class Employee extends Model
         if (Arr::get($array, 'min_salary'))
         {
             $collection->where('salary', '>', Arr::get($array, 'min_salary'));
+//            dd($collection);
         }
         if (Arr::get($array, 'max_salary'))
         {
@@ -64,18 +77,14 @@ class Employee extends Model
         {
             $collection->where('dept_name', Arr::get($array, 'department'));
         }
-        if (Arr::get($array, 'actual_employee'))
+        if (Arr::get($array, 'employee_select'))
         {
-            $collection->where('salaries.to_date', '=', Arr::get($array, 'actual_employee'))
-                       ->where('titles.to_date', '=', Arr::get($array, 'actual_employee'))
-                       ->where('dept_emp.to_date', '=', Arr::get($array, 'actual_employee'));
+            if (request('employee_select') == 1)
+                $collection->whereIn('current_dept_emp.to_date', ['9999-01-01']);
+            else
+                $collection->whereNotIn('current_dept_emp.to_date', ['9999-01-01']);
         }
-
         return $collection;
-    }
-
-    public function departments(){
-        return $this->belongsToMany(Department::class);
     }
 
 }
