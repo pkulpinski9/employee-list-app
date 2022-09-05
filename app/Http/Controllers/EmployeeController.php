@@ -15,6 +15,7 @@ class EmployeeController extends Controller
 {
     public function index(Request $request)
     {
+
         $employees = Employee::getCurrentList($request->all())->paginate(15);
 
 //        dd($employees);
@@ -23,12 +24,14 @@ class EmployeeController extends Controller
         return view('welcome', [
             'employees' => $employees,
             'departments' => $departments,
-            'filters'   => $request->all()
+            'request' => $request
         ]);
     }
-    public function export(Employee $emp_no, Request $request)
+    public function export(Request $request)
     {
-        $currentList = Employee::getCurrentList()->where('employees.emp_no', '=', $emp_no->emp_no);
+
+//        dd($request->all());
+        $currentList = Employee::getCurrentList()->whereIn('employees.emp_no', $request->export);
 
 //        dd($currentList->get());
 
